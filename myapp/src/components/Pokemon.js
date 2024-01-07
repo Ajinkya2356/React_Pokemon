@@ -1,14 +1,15 @@
 import React, { useEffect, useReducer } from "react";
 import axios from "axios";
 import Poke from "./Poke";
+import SearchPokemon from "./SearchPokemon";
+import TypeFilter from "./TypeFilter";
 const initialState = {
   loading: true,
   error: "",
   posts: [],
   offset: 0,
   searchQuery: "",
-  filteredPoke: [],
-  searching: false,
+  searchType: "",
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -27,9 +28,19 @@ const reducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        searching: true,
-        filteredPoke: action.filteredPoke,
         searchQuery: action.keyword,
+      };
+    case "SEARCH_TYPE":
+      return {
+        ...state,
+        loading: false,
+        searchType: action.keyword,
+      };
+    case "CLEAR_SEARCH":
+      return {
+        ...state,
+        searchQuery: "",
+        searchType: "",
       };
     case "RESET":
       return { ...state };
@@ -74,24 +85,45 @@ const Pokemon = () => {
     dispatch({ type: "SET_OFFSET", offset: Math.max(0, state.offset - 20) });
   };
   const handleSearch = (e) => {
-    const filtered = state.posts.filter((pokemon) => {
-      return pokemon.name.toLowerCase().includes(e.target.value.toLowerCase());
-    });
     dispatch({
       type: "SEARCH",
-      filteredPoke: filtered,
       keyword: e.target.value.toLowerCase(),
     });
   };
+  const handleFilter = (e) => {
+    dispatch({
+      type: "SEARCH_TYPE",
+      keyword: e.target.value.toLowerCase(),
+    });
+  };
+  const filteredPoke = state.posts.filter((pokemon) => {
+    const nameMatch = pokemon.name.toLowerCase().includes(state.searchQuery);
+    const typeMatch = pokemon.types
+      .map((type) => type.toLowerCase())
+      .includes(state.searchType);
+    if (state.searchQuery !== "" && state.searchType !== "") {
+      return nameMatch && typeMatch;
+    } else if (state.searchType !== "") {
+      return typeMatch;
+    }
+    return nameMatch || typeMatch;
+  });
+  console.log(filteredPoke);
   useEffect(() => {
     fetchData();
   }, [state.offset]);
-  console.log("Result", state.posts);
+  console.log(state.searchType);
   return (
     <div>
       <div>
-        <h3>Search Pokemon</h3>
-        <input value={state.searchQuery} onChange={handleSearch} type="text" />
+        <SearchPokemon
+          searchQuery={state.searchQuery}
+          handleSearch={handleSearch}
+        />
+        <TypeFilter searchType={state.searchType} handleSearch={handleFilter} />
+        <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
+          Reset
+        </button>
       </div>
       <div
         style={{
@@ -104,31 +136,19 @@ const Pokemon = () => {
       >
         {state.loading
           ? "LOADING"
-          : state.searching
-          ? state.filteredPoke.map((poke) => {
-              return (
-                <div key={poke.ImgUrl}>
-                  <Poke
-                    name={poke.name}
-                    Imgurl={poke.ImgUrl}
-                    id={poke.pid}
-                    types={poke.types}
-                  />
-                </div>
-              );
-            })
-          : state.posts.map((poke) => {
-              return (
-                <div key={poke.ImgUrl}>
-                  <Poke
-                    name={poke.name}
-                    Imgurl={poke.ImgUrl}
-                    id={poke.pid}
-                    types={poke.types}
-                  />
-                </div>
-              );
-            })}
+          : (state.searchQuery || state.searchType
+              ? filteredPoke
+              : state.posts
+            ).map((poke) => (
+              <div key={poke.ImgUrl}>
+                <Poke
+                  name={poke.name}
+                  Imgurl={poke.ImgUrl}
+                  id={poke.pid}
+                  types={poke.types}
+                />
+              </div>
+            ))}
         {state.error ? state.error : null}
       </div>
       <div
