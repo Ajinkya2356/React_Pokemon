@@ -3,6 +3,7 @@ import axios from "axios";
 import Poke from "./Poke";
 import SearchPokemon from "./SearchPokemon";
 import TypeFilter from "./TypeFilter";
+import Stats from "./Stats";
 const initialState = {
   loading: true,
   error: "",
@@ -10,6 +11,7 @@ const initialState = {
   offset: 0,
   searchQuery: "",
   searchType: "",
+  range:[0,210],
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -36,6 +38,12 @@ const reducer = (state, action) => {
         loading: false,
         searchType: action.keyword,
       };
+    case "STATS":
+      return{
+        ...state,
+        loading:false,
+        range:action.stats
+      }
     case "CLEAR_SEARCH":
       return {
         ...state,
@@ -70,6 +78,12 @@ const Pokemon = () => {
           ImgUrl: imageUrl,
           pid: pokemonId,
           types: types,
+          hp: Pdetails.stats[0]["base_stat"],
+          attack: Pdetails.stats[1]["base_stat"],
+          defence: Pdetails.stats[2]["base_stat"],
+          specialAttack: Pdetails.stats[3]["base_stat"],
+          specialDefence: Pdetails.stats[4]["base_stat"],
+          speed: Pdetails.stats[5]["base_stat"],
         });
       }
 
@@ -96,6 +110,12 @@ const Pokemon = () => {
       keyword: e.target.value.toLowerCase(),
     });
   };
+  const handleStats=(e)=>{
+    dispatch({
+      type:"STATS",
+      stats:e.target.value
+    })
+  }
   const filteredPoke = state.posts.filter((pokemon) => {
     const nameMatch = pokemon.name.toLowerCase().includes(state.searchQuery);
     const typeMatch = pokemon.types
@@ -109,10 +129,11 @@ const Pokemon = () => {
     return nameMatch || typeMatch;
   });
   console.log(filteredPoke);
+  console.log("STATS",state.range);
   useEffect(() => {
     fetchData();
   }, [state.offset]);
-  console.log(state.searchType);
+
   return (
     <div>
       <div>
@@ -121,6 +142,14 @@ const Pokemon = () => {
           handleSearch={handleSearch}
         />
         <TypeFilter searchType={state.searchType} handleSearch={handleFilter} />
+        <h1>Select Stats</h1>
+        <Stats selection={handleStats} range={state.range}/>
+        <Stats selection={handleStats} range={state.range}/>
+        <Stats selection={handleStats} range={state.range}/>
+        <Stats selection={handleStats} range={state.range}/>
+        <Stats selection={handleStats} range={state.range}/>
+        <Stats selection={handleStats} range={state.range}/>
+        
         <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
           Reset
         </button>
