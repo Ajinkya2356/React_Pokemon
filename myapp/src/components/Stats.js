@@ -1,12 +1,13 @@
 import React from "react";
 import Slider from "@mui/material/Slider";
 import Grid from "@mui/material/Grid";
-const Stats = ({ selection, range }) => {
-  const stats = ["HP", "Attack", "Defence", "Speed", "Sp.attack", "Sp.defence"];
-  console.log(range);
+const Stats = ({ selection, range, statename }) => {
   return (
-    <div><div style={{ width: "500px" }}>
+    <div>
+      <div style={{ width: "500px" }}>
         <Grid container spacing={2} alignItems="center" className="p-0">
+          <p style={{ marginLeft: "5%" }}>{statename}</p>
+
           <Grid item>0</Grid>
           <Grid item xs>
             <Slider
@@ -16,7 +17,7 @@ const Stats = ({ selection, range }) => {
               onChange={selection}
               valueLabelDisplay="auto"
               max={210}
-              {...stats}
+              name={statename}
             />
           </Grid>
           <Grid item>210</Grid>

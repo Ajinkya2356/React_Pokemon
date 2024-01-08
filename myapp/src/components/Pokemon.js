@@ -11,7 +11,14 @@ const initialState = {
   offset: 0,
   searchQuery: "",
   searchType: "",
-  range:[0,210],
+  statsInput: {
+    hp: [70, 150],
+    attack: [70, 150],
+    defense: [70, 150],
+    speed: [70, 150],
+    "special-attack": [70, 150],
+    "special-defense": [70, 150],
+  },
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -39,16 +46,24 @@ const reducer = (state, action) => {
         searchType: action.keyword,
       };
     case "STATS":
-      return{
+      return {
         ...state,
-        loading:false,
-        range:action.stats
-      }
+        loading: false,
+        statsInput: action.stats,
+      };
     case "CLEAR_SEARCH":
       return {
         ...state,
         searchQuery: "",
         searchType: "",
+        statsInput: {
+          hp: [70, 150],
+          attack: [70, 150],
+          defense: [70, 150],
+          speed: [70, 150],
+          "special-attack": [70, 150],
+          "special-defense": [70, 150],
+        },
       };
     case "RESET":
       return { ...state };
@@ -78,12 +93,14 @@ const Pokemon = () => {
           ImgUrl: imageUrl,
           pid: pokemonId,
           types: types,
-          hp: Pdetails.stats[0]["base_stat"],
-          attack: Pdetails.stats[1]["base_stat"],
-          defence: Pdetails.stats[2]["base_stat"],
-          specialAttack: Pdetails.stats[3]["base_stat"],
-          specialDefence: Pdetails.stats[4]["base_stat"],
-          speed: Pdetails.stats[5]["base_stat"],
+          stats: {
+            hp: Pdetails.stats[0]["base_stat"],
+            attack: Pdetails.stats[1]["base_stat"],
+            defence: Pdetails.stats[2]["base_stat"],
+            specialAttack: Pdetails.stats[3]["base_stat"],
+            specialDefence: Pdetails.stats[4]["base_stat"],
+            speed: Pdetails.stats[5]["base_stat"],
+          },
         });
       }
 
@@ -110,26 +127,93 @@ const Pokemon = () => {
       keyword: e.target.value.toLowerCase(),
     });
   };
-  const handleStats=(e)=>{
+  const handleStats = (e) => {
     dispatch({
-      type:"STATS",
-      stats:e.target.value
-    })
-  }
-  const filteredPoke = state.posts.filter((pokemon) => {
-    const nameMatch = pokemon.name.toLowerCase().includes(state.searchQuery);
-    const typeMatch = pokemon.types
-      .map((type) => type.toLowerCase())
-      .includes(state.searchType);
-    if (state.searchQuery !== "" && state.searchType !== "") {
-      return nameMatch && typeMatch;
-    } else if (state.searchType !== "") {
-      return typeMatch;
+      type: "STATS",
+      stats: { ...state.statsInput, [e.target.name]: e.target.value },
+    });
+  };
+  const initial = {
+    hp: [70, 150],
+    attack: [70, 150],
+    defense: [70, 150],
+    speed: [70, 150],
+    "special-attack": [70, 150],
+    "special-defense": [70, 150],
+  };
+  function isEquivalent(a, b) {
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
+
+    if (aProps.length != bProps.length) {
+      return false;
     }
-    return nameMatch || typeMatch;
-  });
-  console.log(filteredPoke);
-  console.log("STATS",state.range);
+
+    for (let i = 0; i < aProps.length; i++) {
+      const propName = aProps[i];
+      if (a[propName].toString() !== b[propName].toString()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+  const applyFilters = () => {
+    const initial = {
+      hp: [70, 150],
+      attack: [70, 150],
+      defense: [70, 150],
+      speed: [70, 150],
+      "special-attack": [70, 150],
+      "special-defense": [70, 150],
+    };
+
+    const filteredPoke = state.posts.filter((pokemon) => {
+      const nameMatch = pokemon.name.toLowerCase().includes(state.searchQuery);
+      const typeMatch = pokemon.types
+        .map((type) => type.toLowerCase())
+        .includes(state.searchType);
+      const statsMatch = Object.entries(state.statsInput).every(
+        ([statName, statValues]) => {
+          const pokemonStat = parseInt(pokemon.stats[statName]);
+          const minValue = parseInt(statValues[0]);
+          const maxValue = parseInt(statValues[1]);
+          console.log(
+            `Stat: ${statName}, Pokemon Stat: ${pokemonStat}, Min: ${minValue}, Max: ${maxValue}`
+          );
+          return minValue <= pokemonStat && maxValue >= pokemonStat;
+        }
+      );
+
+      if (state.searchQuery !== "" && state.searchType !== "") {
+        return nameMatch && typeMatch;
+      }
+
+      if (state.searchType !== "") {
+        return typeMatch;
+      }
+
+      if (!isEquivalent(state.statsInput, initial)) {
+        return (
+          (state.searchQuery !== "" &&
+            state.searchType !== "" &&
+            nameMatch &&
+            typeMatch &&
+            statsMatch) ||
+          (state.searchType !== "" && typeMatch && statsMatch) ||
+          statsMatch
+        );
+      }
+
+      return nameMatch || typeMatch || statsMatch;
+    });
+
+    // console.log("Filter", filteredPoke);
+    return filteredPoke;
+  };
+
+  // console.log("STATS", state.statsInput);
+  
   useEffect(() => {
     fetchData();
   }, [state.offset]);
@@ -143,13 +227,37 @@ const Pokemon = () => {
         />
         <TypeFilter searchType={state.searchType} handleSearch={handleFilter} />
         <h1>Select Stats</h1>
-        <Stats selection={handleStats} range={state.range}/>
-        <Stats selection={handleStats} range={state.range}/>
-        <Stats selection={handleStats} range={state.range}/>
-        <Stats selection={handleStats} range={state.range}/>
-        <Stats selection={handleStats} range={state.range}/>
-        <Stats selection={handleStats} range={state.range}/>
-        
+        <Stats
+          selection={handleStats}
+          range={state.statsInput.hp}
+          statename={"hp"}
+        />
+        <Stats
+          selection={handleStats}
+          range={state.statsInput.attack}
+          statename={"attack"}
+        />
+        <Stats
+          selection={handleStats}
+          range={state.statsInput.defense}
+          statename={"defense"}
+        />
+        <Stats
+          selection={handleStats}
+          range={state.statsInput.speed}
+          statename={"speed"}
+        />
+        <Stats
+          selection={handleStats}
+          range={state.statsInput["special-attack"]}
+          statename={"special-attack"}
+        />
+        <Stats
+          selection={handleStats}
+          range={state.statsInput["special-defense"]}
+          statename={"special-defense"}
+        />
+
         <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
           Reset
         </button>
@@ -165,8 +273,8 @@ const Pokemon = () => {
       >
         {state.loading
           ? "LOADING"
-          : (state.searchQuery || state.searchType
-              ? filteredPoke
+          : (state.searchQuery || state.searchType || state.statsInput
+              ? applyFilters()
               : state.posts
             ).map((poke) => (
               <div key={poke.ImgUrl}>
