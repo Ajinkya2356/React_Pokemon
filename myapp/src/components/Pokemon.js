@@ -1,9 +1,10 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer,useState } from "react";
 import axios from "axios";
 import Poke from "./Poke";
 import SearchPokemon from "./SearchPokemon";
 import TypeFilter from "./TypeFilter";
 import Stats from "./Stats";
+import PokemonDetails from "./PokemonDetails";
 const initialState = {
   loading: true,
   error: "",
@@ -19,11 +20,17 @@ const initialState = {
     "special-attack": [70, 150],
     "special-defense": [70, 150],
   },
+  filterdResult: [],
 };
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_POKEMON":
-      return { ...state, loading: false, posts: action.results, error: "" };
+      return {
+        ...state,
+        loading: false,
+        posts: action.results,
+        error: "",
+      };
     case "ERROR":
       return {
         ...state,
@@ -51,6 +58,11 @@ const reducer = (state, action) => {
         loading: false,
         statsInput: action.stats,
       };
+    case "SET_FILTERED_RESULT":
+      return {
+        ...state,
+        filteredResult: action.payload,
+      };
     case "CLEAR_SEARCH":
       return {
         ...state,
@@ -64,15 +76,28 @@ const reducer = (state, action) => {
           "special-attack": [70, 150],
           "special-defense": [70, 150],
         },
+        filteredResult: state.posts,
       };
-    case "RESET":
-      return { ...state };
+
     default:
       return { ...state };
   }
 };
 const Pokemon = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleDetailsScreen = (pokemon) => {
+    setSelectedPokemon(pokemon);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedPokemon(null);
+    setIsModalOpen(false);
+  };
+
   const fetchData = async () => {
     const Pokemon = [];
     try {
@@ -96,7 +121,7 @@ const Pokemon = () => {
           stats: {
             hp: Pdetails.stats[0]["base_stat"],
             attack: Pdetails.stats[1]["base_stat"],
-            defence: Pdetails.stats[2]["base_stat"],
+            defense: Pdetails.stats[2]["base_stat"],
             specialAttack: Pdetails.stats[3]["base_stat"],
             specialDefence: Pdetails.stats[4]["base_stat"],
             speed: Pdetails.stats[5]["base_stat"],
@@ -120,11 +145,25 @@ const Pokemon = () => {
       type: "SEARCH",
       keyword: e.target.value.toLowerCase(),
     });
+    dispatch({
+      type: "SET_FILTERED_RESULT",
+      payload: state.posts.filter((item) =>
+        item.name.includes(e.target.value.toLowerCase())
+      ),
+    });
   };
   const handleFilter = (e) => {
     dispatch({
       type: "SEARCH_TYPE",
       keyword: e.target.value.toLowerCase(),
+    });
+    dispatch({
+      type: "SET_FILTERED_RESULT",
+      payload: state.posts.filter((item) =>
+        item.types
+          .map((type) => type.toLowerCase())
+          .includes(e.target.value.toLowerCase())
+      ),
     });
   };
   const handleStats = (e) => {
@@ -133,91 +172,40 @@ const Pokemon = () => {
       stats: { ...state.statsInput, [e.target.name]: e.target.value },
     });
   };
-  const initial = {
-    hp: [70, 150],
-    attack: [70, 150],
-    defense: [70, 150],
-    speed: [70, 150],
-    "special-attack": [70, 150],
-    "special-defense": [70, 150],
-  };
-  function isEquivalent(a, b) {
-    const aProps = Object.getOwnPropertyNames(a);
-    const bProps = Object.getOwnPropertyNames(b);
-
-    if (aProps.length != bProps.length) {
-      return false;
-    }
-
-    for (let i = 0; i < aProps.length; i++) {
-      const propName = aProps[i];
-      if (a[propName].toString() !== b[propName].toString()) {
-        return false;
-      }
-    }
-
-    return true;
-  }
   const applyFilters = () => {
-    const initial = {
-      hp: [70, 150],
-      attack: [70, 150],
-      defense: [70, 150],
-      speed: [70, 150],
-      "special-attack": [70, 150],
-      "special-defense": [70, 150],
-    };
+    const filteredResult = state.posts.filter((item) => {
+      if (
+        Object.values(state.statsInput).some(
+          (range) => range[0] !== 70 || range[1] !== 150
+        )
+      ) {
+        let satisfies = true;
+        Object.entries(state.statsInput).forEach(([statName, statValues]) => {
+          const pokemonStat = item.stats[statName];
+          const [minValue, maxValue] = statValues.map(Number);
 
-    const filteredPoke = state.posts.filter((pokemon) => {
-      const nameMatch = pokemon.name.toLowerCase().includes(state.searchQuery);
-      const typeMatch = pokemon.types
-        .map((type) => type.toLowerCase())
-        .includes(state.searchType);
-      const statsMatch = Object.entries(state.statsInput).every(
-        ([statName, statValues]) => {
-          const pokemonStat = parseInt(pokemon.stats[statName]);
-          const minValue = parseInt(statValues[0]);
-          const maxValue = parseInt(statValues[1]);
-          console.log(
-            `Stat: ${statName}, Pokemon Stat: ${pokemonStat}, Min: ${minValue}, Max: ${maxValue}`
-          );
-          return minValue <= pokemonStat && maxValue >= pokemonStat;
-        }
-      );
-
-      if (state.searchQuery !== "" && state.searchType !== "") {
-        return nameMatch && typeMatch;
+          if (!(minValue <= pokemonStat && pokemonStat <= maxValue)) {
+            satisfies = false;
+          }
+        });
+        return satisfies;
+      } else {
+        return true;
       }
-
-      if (state.searchType !== "") {
-        return typeMatch;
-      }
-
-      if (!isEquivalent(state.statsInput, initial)) {
-        return (
-          (state.searchQuery !== "" &&
-            state.searchType !== "" &&
-            nameMatch &&
-            typeMatch &&
-            statsMatch) ||
-          (state.searchType !== "" && typeMatch && statsMatch) ||
-          statsMatch
-        );
-      }
-
-      return nameMatch || typeMatch || statsMatch;
     });
 
-    // console.log("Filter", filteredPoke);
-    return filteredPoke;
+    dispatch({ type: "SET_FILTERED_RESULT", payload: filteredResult });
   };
 
-  // console.log("STATS", state.statsInput);
-  
+  console.log("Filtered Results", state.filteredResult);
   useEffect(() => {
     fetchData();
   }, [state.offset]);
 
+  useEffect(() => {
+    dispatch({ type: "SET_FILTERED_RESULT", payload: state.posts });
+  }, [state.posts]);
+  console.log(selectedPokemon);
   return (
     <div>
       <div>
@@ -257,7 +245,7 @@ const Pokemon = () => {
           range={state.statsInput["special-defense"]}
           statename={"special-defense"}
         />
-
+        {<button onClick={applyFilters}>Apply</button>}
         <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
           Reset
         </button>
@@ -274,10 +262,10 @@ const Pokemon = () => {
         {state.loading
           ? "LOADING"
           : (state.searchQuery || state.searchType || state.statsInput
-              ? applyFilters()
+              ? state.filteredResult
               : state.posts
             ).map((poke) => (
-              <div key={poke.ImgUrl}>
+              <div key={poke.ImgUrl} onClick={() => toggleDetailsScreen(poke)}>
                 <Poke
                   name={poke.name}
                   Imgurl={poke.ImgUrl}
@@ -288,6 +276,9 @@ const Pokemon = () => {
             ))}
         {state.error ? state.error : null}
       </div>
+      {selectedPokemon && isModalOpen && (
+        <PokemonDetails pokemon={selectedPokemon} onClose={closeModal} />
+      )}
       <div
         style={{
           display: "flex",
