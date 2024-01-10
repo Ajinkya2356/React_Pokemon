@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer,useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import Poke from "./Poke";
 import SearchPokemon from "./SearchPokemon";
@@ -20,7 +20,9 @@ const initialState = {
     "special-attack": [70, 150],
     "special-defense": [70, 150],
   },
-  filterdResult: [],
+  filteredResult: [],
+  pokemon: null,
+  isModalOpen: false,
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -63,6 +65,18 @@ const reducer = (state, action) => {
         ...state,
         filteredResult: action.payload,
       };
+    case "POKEMON":
+      return {
+        ...state,
+        pokemon: action.payload,
+        isModalOpen: action.value,
+      }
+    case "CLOSE_POKEMON":
+      return {
+        ...state,
+        pokemon: null,
+        isModalOpen: false,
+      }
     case "CLEAR_SEARCH":
       return {
         ...state,
@@ -85,17 +99,15 @@ const reducer = (state, action) => {
 };
 const Pokemon = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [selectedPokemon, setSelectedPokemon] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const toggleDetailsScreen = (pokemon) => {
-    setSelectedPokemon(pokemon);
-    setIsModalOpen(true);
+    console.log("Event trigerred")
+    dispatch({ type: "POKEMON", payload: pokemon, value: true })
   };
 
   const closeModal = () => {
-    setSelectedPokemon(null);
-    setIsModalOpen(false);
+    dispatch({ type: "CLOSE_POKEMON" })
   };
 
   const fetchData = async () => {
@@ -113,6 +125,9 @@ const Pokemon = () => {
         const parts = poke.url.split("/");
         const pokemonId = parts[parts.length - 2];
         const types = Pdetails.types.map((item) => item.type.name);
+        const abilities=Pdetails.abilities.map((item)=>{
+          return item.ability.name;
+        })
         Pokemon.push({
           name: poke.name,
           ImgUrl: imageUrl,
@@ -126,7 +141,11 @@ const Pokemon = () => {
             specialDefence: Pdetails.stats[4]["base_stat"],
             speed: Pdetails.stats[5]["base_stat"],
           },
+          height:Pdetails.height,
+          weight:Pdetails.weight,
+          abilities,
         });
+        
       }
 
       dispatch({ type: "FETCH_POKEMON", results: Pokemon });
@@ -205,7 +224,7 @@ const Pokemon = () => {
   useEffect(() => {
     dispatch({ type: "SET_FILTERED_RESULT", payload: state.posts });
   }, [state.posts]);
-  console.log(selectedPokemon);
+
   return (
     <div>
       <div>
@@ -259,9 +278,10 @@ const Pokemon = () => {
           gap: "5%",
         }}
       >
-        {state.loading
-          ? "LOADING"
-          : (state.searchQuery || state.searchType || state.statsInput
+        {
+          state.loading
+            ? "LOADING"
+            : ((state.searchQuery || state.searchType || state.statsInput)
               ? state.filteredResult
               : state.posts
             ).map((poke) => (
@@ -274,11 +294,14 @@ const Pokemon = () => {
                 />
               </div>
             ))}
+        <div>
+          {state.isModalOpen && state.pokemon ? (
+            <PokemonDetails pokemon={state.pokemon} onClose={closeModal} />
+          ) : null}
+        </div>
         {state.error ? state.error : null}
       </div>
-      {selectedPokemon && isModalOpen && (
-        <PokemonDetails pokemon={selectedPokemon} onClose={closeModal} />
-      )}
+
       <div
         style={{
           display: "flex",
