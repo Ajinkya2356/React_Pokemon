@@ -5,6 +5,8 @@ import SearchPokemon from "./SearchPokemon";
 import TypeFilter from "./TypeFilter";
 import Stats from "./Stats";
 import PokemonDetails from "./PokemonDetails";
+import "./Pokemon.css";
+import Gender from "./Gender";
 const initialState = {
   loading: true,
   error: "",
@@ -70,13 +72,13 @@ const reducer = (state, action) => {
         ...state,
         pokemon: action.payload,
         isModalOpen: action.value,
-      }
+      };
     case "CLOSE_POKEMON":
       return {
         ...state,
         pokemon: null,
         isModalOpen: false,
-      }
+      };
     case "CLEAR_SEARCH":
       return {
         ...state,
@@ -99,15 +101,20 @@ const reducer = (state, action) => {
 };
 const Pokemon = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-
+  const [window, setWindow] = useState(false);
+  const toggleWindow = () => {
+    setWindow(true);
+  }
+  const onClose = () => {
+    setWindow(false);
+  }
   const toggleDetailsScreen = (pokemon) => {
-    console.log("Event trigerred")
-    dispatch({ type: "POKEMON", payload: pokemon, value: true })
+    console.log("Event trigerred");
+    dispatch({ type: "POKEMON", payload: pokemon, value: true });
   };
 
   const closeModal = () => {
-    dispatch({ type: "CLOSE_POKEMON" })
+    dispatch({ type: "CLOSE_POKEMON" });
   };
 
   const fetchData = async () => {
@@ -125,9 +132,9 @@ const Pokemon = () => {
         const parts = poke.url.split("/");
         const pokemonId = parts[parts.length - 2];
         const types = Pdetails.types.map((item) => item.type.name);
-        const abilities=Pdetails.abilities.map((item)=>{
+        const abilities = Pdetails.abilities.map((item) => {
           return item.ability.name;
-        })
+        });
         Pokemon.push({
           name: poke.name,
           ImgUrl: imageUrl,
@@ -141,11 +148,10 @@ const Pokemon = () => {
             specialDefence: Pdetails.stats[4]["base_stat"],
             speed: Pdetails.stats[5]["base_stat"],
           },
-          height:Pdetails.height,
-          weight:Pdetails.weight,
+          height: Pdetails.height,
+          weight: Pdetails.weight,
           abilities,
         });
-        
       }
 
       dispatch({ type: "FETCH_POKEMON", results: Pokemon });
@@ -224,50 +230,135 @@ const Pokemon = () => {
   useEffect(() => {
     dispatch({ type: "SET_FILTERED_RESULT", payload: state.posts });
   }, [state.posts]);
+  const toggleClass = () => {
+    console.log("Class called");
+    document.getElementById("hidden").display = "block";
+  };
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div>
-      <div>
-        <SearchPokemon
-          searchQuery={state.searchQuery}
-          handleSearch={handleSearch}
-        />
+      <div className="box">
+
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <SearchPokemon className="searchFilter"
+            searchQuery={state.searchQuery}
+            handleSearch={handleSearch}
+          />
+          <button className="hamburger" onClick={toggleWindow}>
+            ☰
+          </button>
+          {window && <div className="filterWindow">
+            <span className="closebtn" onClick={onClose}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+            </svg></span>
+            <h1>&nbsp;&nbsp;Filters</h1>
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <div className="smallContent"><h3>Types</h3> (Nomral+5 More)<svg onClick={toggleDropdown} xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+              </svg>
+
+              </div>
+              {isOpen && <div>Open</div>}
+              <div className="smallContent"><h3>Gender</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+              </svg></div>
+              <div className="smallContent"><h3>Stats</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+              </svg></div>
+            </div>
+
+            <div className="smallbtn">
+              <button className="resetbtn">Reset</button>
+              <button className="applybtn">Apply</button>
+            </div>
+          </div>}
+        </div>
+
         <TypeFilter searchType={state.searchType} handleSearch={handleFilter} />
-        <h1>Select Stats</h1>
-        <Stats
-          selection={handleStats}
-          range={state.statsInput.hp}
-          statename={"hp"}
-        />
-        <Stats
-          selection={handleStats}
-          range={state.statsInput.attack}
-          statename={"attack"}
-        />
-        <Stats
-          selection={handleStats}
-          range={state.statsInput.defense}
-          statename={"defense"}
-        />
-        <Stats
-          selection={handleStats}
-          range={state.statsInput.speed}
-          statename={"speed"}
-        />
-        <Stats
-          selection={handleStats}
-          range={state.statsInput["special-attack"]}
-          statename={"special-attack"}
-        />
-        <Stats
-          selection={handleStats}
-          range={state.statsInput["special-defense"]}
-          statename={"special-defense"}
-        />
-        {<button onClick={applyFilters}>Apply</button>}
-        <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
-          Reset
-        </button>
+        <Gender />
+        <div className="statsFilter">
+          <h4>Stats</h4>
+          <select
+            onClick={toggleClass}
+            style={{
+              width: "194px",
+              height: "57px",
+              borderRadius: "8px",
+              background: "#C9DDE2",
+              border: "none", paddingLeft: "2%", paddingRight: "2%"
+            }}
+          >
+            <option value="">HP + 5 More</option>
+
+          </select>
+        </div>
+
+        <div style={{ border: "2px solid red", width: "600px" }} id="hidden">
+          <h2>&nbsp;&nbsp;&nbsp;&nbsp;Select Stats</h2>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ width: "30%" }}>
+              <ul className="line">
+                <li>HP</li>
+                <li>Attack</li>
+                <li>Defence</li>
+                <li>Speed</li>
+                <li>Sp.Attack</li>
+                <li>Sp.Defence</li>
+              </ul>
+            </div>
+
+            <div style={{ width: "70%", paddingLeft: "5%" }}>
+              <Stats
+                selection={handleStats}
+                range={state.statsInput.attack}
+                statename={"attack"}
+              />
+              <Stats
+                selection={handleStats}
+                range={state.statsInput.defense}
+                statename={"defense"}
+              />
+              <Stats
+                selection={handleStats}
+                range={state.statsInput.speed}
+                statename={"speed"}
+              />
+              <Stats
+                selection={handleStats}
+                range={state.statsInput["special-attack"]}
+                statename={"special-attack"}
+              />
+              <Stats
+                selection={handleStats}
+                range={state.statsInput["special-defense"]}
+                statename={"special-defense"}
+              />
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: "5%",
+              marginRight: "7%",
+            }}
+          >
+            <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
+              Reset
+            </button>
+            {<button onClick={applyFilters}>Apply</button>}
+          </div>
+        </div>
       </div>
       <div
         style={{
@@ -278,22 +369,21 @@ const Pokemon = () => {
           gap: "5%",
         }}
       >
-        {
-          state.loading
-            ? "LOADING"
-            : ((state.searchQuery || state.searchType || state.statsInput)
-              ? state.filteredResult
-              : state.posts
-            ).map((poke) => (
-              <div key={poke.ImgUrl} onClick={() => toggleDetailsScreen(poke)}>
-                <Poke
-                  name={poke.name}
-                  Imgurl={poke.ImgUrl}
-                  id={poke.pid}
-                  types={poke.types}
-                />
-              </div>
-            ))}
+        {state.loading
+          ? "LOADING"
+          : (state.searchQuery || state.searchType || state.statsInput
+            ? state.filteredResult
+            : state.posts
+          ).map((poke) => (
+            <div key={poke.ImgUrl} onClick={() => toggleDetailsScreen(poke)}>
+              <Poke
+                name={poke.name}
+                Imgurl={poke.ImgUrl}
+                id={poke.pid}
+                types={poke.types}
+              />
+            </div>
+          ))}
         <div>
           {state.isModalOpen && state.pokemon ? (
             <PokemonDetails pokemon={state.pokemon} onClose={closeModal} />

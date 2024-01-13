@@ -1,12 +1,31 @@
-import React from 'react'
+import React, { useState } from "react";
+import "./Pokemon.css"
+import TypeFilter from "./TypeFilter";
+const SearchPokemon = ({ searchQuery, handleSearch }) => {
 
-const SearchPokemon = ({searchQuery,handleSearch}) => {
   return (
-    <div>
-      <h3>Search Pokemon</h3>
-    <input value={searchQuery} onChange={handleSearch} type="text" />
-    </div>
-  )
-}
+    <div
+      style={{
+        // display: "inline-block",
+        padding: 0,
+        margin: 0,
 
-export default SearchPokemon
+      }}
+    >
+      <h4 id="searchTitle">Search by</h4>
+      <div >
+        <input
+          className="searchInput"
+          placeholder="Name or Number"
+          value={searchQuery}
+          onChange={handleSearch}
+          type="text"
+        />
+
+      </div>
+
+    </div>
+  );
+};
+
+export default SearchPokemon;
