@@ -4,10 +4,13 @@ import axios from "axios";
 import Poke from "./Poke";
 import "./style.css";
 import DetailPoke from "./DetailPoke";
+import EvolutionCard from "./EvolutionCard";
+import Loader from "./Loader";
 const PokemonDetails = ({ pokemon, onClose }) => {
   const [pokemonData, setPokemonData] = useState({});
   const [loading, setLoading] = useState(true);
   const [chain, setChain] = useState([])
+  const [popup, setpopup] = useState(false)
   const fetchDetails = async () => {
     try {
       const res = await axios.get(
@@ -22,9 +25,13 @@ const PokemonDetails = ({ pokemon, onClose }) => {
           index
         );
       });
-      text = text.slice(0, 4);
+      text = text.slice(0, 10);
+      const overallText = text.map((item) => item.flavor_text).join(" ");
+      const over = overallText.replace(/,\s*|\n|\f/g, "");
+      text = text.slice(0, 4)
       const description = text.map((item) => item.flavor_text).join(" ");
       const cleanedText = description.replace(/,\s*|\n|\f/g, "");
+
       const gender =
         data.gender_rate >= 1 && data.gender_rate <= 8
           ? "Male,Female"
@@ -43,6 +50,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
         types: pokemon.types,
         abilities: pokemon.abilities,
         stats: pokemon.stats,
+        over,
       });
 
       let speciesInfo = data;
@@ -88,6 +96,9 @@ const PokemonDetails = ({ pokemon, onClose }) => {
   const capitalize = (name) => {
     return name.charAt(0).toUpperCase() + name.slice(1);
   }
+  const openPopup = () => {
+    setpopup(!popup)
+  }
   return (
     <div className="overlayStyles">
       <div className="modal">
@@ -97,14 +108,19 @@ const PokemonDetails = ({ pokemon, onClose }) => {
           </span>
 
           {loading ? (
-            <h1>Loading...</h1>
+            <Loader />
           ) : (
             <>
               <h1 className="headingPokemon">
                 {pokemon.name.toUpperCase()} | {padWithZeros(pokemonData.id, 3)} |
               </h1>
               <DetailPoke Imgurl={pokemon.ImgUrl} types={pokemon.types} />
-              <p className="description" >{pokemonData.text}..<b style={{ textDecoration: "underline" }}>read more</b></p>
+              <p className="description" >{pokemonData.text}..<b onClick={openPopup} style={{ textDecoration: "underline" }}>read more</b></p>
+              {popup && <p className="popover">
+                <span onClick={openPopup}>&times;</span>
+                <br />
+                {pokemonData.over}
+              </p>}
               <br />
               <div className="container1">
                 <div>
@@ -129,7 +145,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                 </div>
               </div>
               <div
-              className="container2"
+                className="container2"
               >
                 <div>
                   <p>Abilities</p>
@@ -185,20 +201,17 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                 {chain && chain.length > 0 ? (
                   chain.map((poke, index) => {
                     return (
-                      <div>
-                        <Poke
-                          key={poke.nameInfo.id}
-                          name={poke.nameInfo.name}
-                          id={poke.nameInfo.id}
+                      <div style={{ display: "flex", flexDirection: "row" }}>
+                        <EvolutionCard
                           Imgurl={poke.image}
                           types={poke.types}
-                        ></Poke>
+                        ></EvolutionCard>
                         {
                           index !== chain.length - 1 ? (
                             <div className="arrows">
                               <svg style={{
-                                position: "absolute", left: `${37 + index * 26}%`,
-                                top: "130%",
+                                position: "absolute", left: `${39 + index * 20}%`,
+                                top: "138%",
                                 strokeWidth: "1px",
                                 stroke: "#2E3156"
                               }} xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">

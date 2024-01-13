@@ -107,6 +107,15 @@
   justify-content: center;
   align-items: center;
 }
+.smallImage {
+  border-radius: 8px;
+  border: 1px dashed #2e3156;
+  width: 155.177px;
+  height: 216px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .headingPokemon {
   position: absolute;
   top: 5%;
@@ -142,6 +151,27 @@
   margin: 5%;
   border-radius: 8px;
 }
+.abcd {
+  width: 104px;
+  height: 120px;
+}
+.popover {
+  border: 1px solid #2e3156;
+  background-color: #2e3156;
+  color: white;
+  border-radius: 8px;
+  padding: 0% 1%;
+  width: 675px;
+  height: 300px;
+  box-shadow: 0px 4px 20px 0px #2e3156;
+  position:absolute;
+  top:50%;
+}
+.popover span{
+  margin-left:99%;
+  font-size:25px;
+  cursor:pointer;
+}
 @media screen and (max-width: 1424px) {
   .modal-content {
     width: 100%;
@@ -150,15 +180,26 @@
   .evolutionchain {
     max-width: 100%;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10%;
   }
   .Image {
     width: 159px;
     height: 221.322px;
     margin-top: 15%;
+    border: 1px dashed #2e3156;
   }
   .Image img {
     width: 125.442px;
     height: 123.045px;
+  }
+  .smallImage {
+    width: 84.054px;
+    height: 117px;
+  }
+  .abcd {
+    width: 63.194px;
+    height: 65px;
   }
   .description {
     width: 150px;
@@ -189,8 +230,7 @@
     flex-direction: row;
     gap: 15%;
   }
-  .arrows{
+  .arrows {
     display: none;
   }
-  
 }

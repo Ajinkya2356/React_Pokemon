@@ -8,7 +8,8 @@ import PokemonDetails from "./PokemonDetails";
 import "./Pokemon.css";
 import Gender from "./Gender";
 import OverlayContent from "./OverlayContent";
-import OverlayStats from "./OverlayStats";
+
+import Loader from "./Loader";
 const initialState = {
   loading: true,
   error: "",
@@ -21,8 +22,8 @@ const initialState = {
     attack: [70, 150],
     defense: [70, 150],
     speed: [70, 150],
-    "special-attack": [70, 150],
-    "special-defense": [70, 150],
+    specialAttack: [70, 150],
+    specialDefence: [70, 150],
   },
   filteredResult: [],
   pokemon: null,
@@ -91,8 +92,8 @@ const reducer = (state, action) => {
           attack: [70, 150],
           defense: [70, 150],
           speed: [70, 150],
-          "special-attack": [70, 150],
-          "special-defense": [70, 150],
+          specialAttack: [70, 150],
+          specialDefence: [70, 150],
         },
         filteredResult: state.posts,
       };
@@ -208,7 +209,9 @@ const Pokemon = () => {
       ) {
         let satisfies = true;
         Object.entries(state.statsInput).forEach(([statName, statValues]) => {
+          console.log("statname", statName)
           const pokemonStat = item.stats[statName];
+          console.log("stat", pokemonStat)
           const [minValue, maxValue] = statValues.map(Number);
 
           if (!(minValue <= pokemonStat && pokemonStat <= maxValue)) {
@@ -270,7 +273,7 @@ const Pokemon = () => {
               </svg>
 
               </div>
-              {isOpen && <OverlayContent searchType={state.searchType} handleSearch={handleFilter}/>}
+              {isOpen && <OverlayContent searchType={state.searchType} handleSearch={handleFilter} />}
               {!isOpen && <div className="smallContent"><h3>Gender</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
@@ -279,12 +282,55 @@ const Pokemon = () => {
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
               </svg></div>}
-              {open && <OverlayStats />}
+              {open && <div className="overlay2">
+                <ul>
+                  <li>
+                    <h3>HP</h3>
+                    <Stats
+                      selection={handleStats}
+                      range={state.statsInput.hp}
+                      statename={"hp"}
+                    />
+                  </li>
+                  <li>
+                    <h3>Attack</h3>
+                    <Stats
+                      selection={handleStats}
+                      range={state.statsInput.attack}
+                      statename={"attack"}
+                    />
+                  </li>
+                  <li><h3>Defense</h3>
+                    <Stats
+                      selection={handleStats}
+                      range={state.statsInput.defense}
+                      statename={"defense"}
+                    /></li>
+                  <li><h3>Speed</h3>
+                    <Stats
+                      selection={handleStats}
+                      range={state.statsInput.speed}
+                      statename={"speed"}
+                    /></li>
+                  <li><h3>Sp.Attack</h3>
+                    <Stats
+                      selection={handleStats}
+                      range={state.statsInput["specialAttack"]}
+                      statename={"specialAttack"}
+                    /></li>
+                  <li><h3>Sp.Defense</h3>
+                    <Stats
+                      selection={handleStats}
+                      range={state.statsInput["specialDefence"]}
+                      statename={"specialDefence"}
+                    /></li>
+                </ul>
+              </div>}
             </div>
 
             <div className="smallbtn">
-              <button className="resetbtn">Reset</button>
-              <button className="applybtn">Apply</button>
+              <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })} className="resetbtn">Reset</button>
+              <button onClick={applyFilters} className="applybtn">Apply</button>
             </div>
           </div>}
         </div>
@@ -310,6 +356,12 @@ const Pokemon = () => {
 
         {openstat && <div style={{ width: "600px", zIndex: "100", background: "white", position: "absolute", left: "60%", top: "38%", borderRadius: "8px", boxShadow: "0px 4px 14px 0px rgba(46, 49, 86, 0.40)", color: "#2E3156" }} >
           <h2>&nbsp;&nbsp;&nbsp;&nbsp;Select Stats</h2>
+          <span style={{position:"absolute",top:"5%",left:"85%"}} onClick={toggleClass}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+            </svg>
+          </span>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{ width: "25%" }}>
               <ul className="line">
@@ -322,7 +374,12 @@ const Pokemon = () => {
               </ul>
             </div>
 
-            <div style={{ width: "70%", paddingLeft: "5%" }}>
+            <div style={{ width: "70%", paddingLeft: "5%", marginTop: "4%" }}>
+              <Stats
+                selection={handleStats}
+                range={state.statsInput.hp}
+                statename={"hp"}
+              />
               <Stats
                 selection={handleStats}
                 range={state.statsInput.attack}
@@ -340,13 +397,13 @@ const Pokemon = () => {
               />
               <Stats
                 selection={handleStats}
-                range={state.statsInput["special-attack"]}
-                statename={"special-attack"}
+                range={state.statsInput["specialAttack"]}
+                statename={"specialAttack"}
               />
               <Stats
                 selection={handleStats}
-                range={state.statsInput["special-defense"]}
-                statename={"special-defense"}
+                range={state.statsInput["specialDefence"]}
+                statename={"specialDefence"}
               />
             </div>
           </div>
@@ -378,7 +435,7 @@ const Pokemon = () => {
         }}
       >
         {state.loading
-          ? "LOADING"
+          ? <Loader />
           : (state.searchQuery || state.searchType || state.statsInput
             ? state.filteredResult
             : state.posts

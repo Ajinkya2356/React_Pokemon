@@ -12,7 +12,7 @@ body {
   height: 150px;
 }
 .line li {
-  margin-top: 11%;
+  margin-top: 20%;
   list-style: none;
 }
 #hidden {
@@ -35,7 +35,7 @@ body {
 }
 .filterWindow {
   width: 337px;
-  height: 753px;
+  height: 780px;
   border-radius: 8px;
   background: #fff;
   box-shadow: 0px 4px 14px 0px rgba(46, 49, 86, 0.4);
@@ -64,15 +64,17 @@ body {
   margin-left: 3%;
 }
 .smallbtn {
-  border: 1px solid #2e3156;
+  border-top: 1px solid #2e3156;
   position: absolute;
-  top: 91%;
+  top: 90%;
   width: 337px;
   height: 67px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 5%;
+  background-color: white;
+  /* display: none; */
 }
 .applybtn {
   width: 138.614px;
@@ -97,6 +99,33 @@ body {
   width: 78px;
   height: 37px;
   font-size: 15px;
+}
+.overlay2 {
+  overflow-y: scroll;
+  width: 295px;
+  height: 370px;
+  border-radius: 8px;
+  border: 1px solid #2e3156;
+  margin-left:5%;
+}
+ul li {
+  list-style: none;
+  width: 50%;
+  margin-left:-5%;
+}
+ul {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+.statsWindow{
+  width:350px;
+  margin-top: 2%;
+  background-color: #F1F3F3;
+  border-radius: 8px;
+  border: 1px solid #2e3156;
+  padding:0 5%;
 }
 @media screen and (min-width: 1425px) {
   .hamburger {
@@ -123,5 +152,8 @@ body {
   .searchInput {
     width: 239px;
     margin-right: 15px;
+  }
+  .statsWindow{
+    width:230px;
   }
 }
