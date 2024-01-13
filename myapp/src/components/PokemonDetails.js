@@ -100,13 +100,13 @@ const PokemonDetails = ({ pokemon, onClose }) => {
             <h1>Loading...</h1>
           ) : (
             <>
-              <h1 style={{ position: "absolute", top: "5%", left: "40%" }}>
+              <h1 className="headingPokemon">
                 {pokemon.name.toUpperCase()} | {padWithZeros(pokemonData.id, 3)} |
               </h1>
               <DetailPoke Imgurl={pokemon.ImgUrl} types={pokemon.types} />
               <p className="description" >{pokemonData.text}..<b style={{ textDecoration: "underline" }}>read more</b></p>
               <br />
-              <div style={{ color: "#2E3156", fontSize: "16px", fontWeight: "700", display: "flex", justifyContent: "center", gap: "20%" }}>
+              <div className="container1">
                 <div>
                   <p>Height</p>
                   <p style={{ fontWeight: "400" }}>{pokemonData.height}</p>
@@ -129,7 +129,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                 </div>
               </div>
               <div
-                style={{ color: "#2E3156", fontSize: "16px", fontWeight: "700", display: "flex", justifyContent: "flex-start", gap: "10%" }}
+              className="container2"
               >
                 <div>
                   <p>Abilities</p>
@@ -195,7 +195,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                         ></Poke>
                         {
                           index !== chain.length - 1 ? (
-                            <div >
+                            <div className="arrows">
                               <svg style={{
                                 position: "absolute", left: `${37 + index * 26}%`,
                                 top: "130%",
