@@ -5,7 +5,10 @@ import "./Pokemon.css"
 const Stats = ({ selection, range, statename }) => {
   return (
     <div >
-      <div style={{ width: "350px", marginTop: "3%" }}>
+      <div style={{
+        width: "350px", marginTop: "3%", background: "#F1F3F3", borderRadius: "8px;"
+        , border: "1px solid #2E3156",borderRadius:"8px",padding:"0 5%"
+      }}>
         <Grid container spacing={2} alignItems="center" className="p-0">
 
 
@@ -19,6 +22,7 @@ const Stats = ({ selection, range, statename }) => {
               valueLabelDisplay="auto"
               max={210}
               name={statename}
+              
             />
           </Grid>
           <Grid item>210</Grid>

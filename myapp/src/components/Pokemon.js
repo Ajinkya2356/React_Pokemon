@@ -7,6 +7,8 @@ import Stats from "./Stats";
 import PokemonDetails from "./PokemonDetails";
 import "./Pokemon.css";
 import Gender from "./Gender";
+import OverlayContent from "./OverlayContent";
+import OverlayStats from "./OverlayStats";
 const initialState = {
   loading: true,
   error: "",
@@ -121,14 +123,14 @@ const Pokemon = () => {
     const Pokemon = [];
     try {
       const res = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon?offset=${state.offset}&limit=20`
+        `https://pokeapi.co/api/v2/pokemon?offset=${state.offset}&limit=21`
       );
       const data = res.data;
       const results = data.results;
       for (const poke of results) {
         const Purl = await axios.get(poke.url);
         const Pdetails = Purl.data;
-        const imageUrl = Pdetails.sprites.other.showdown.front_default;
+        const imageUrl = Pdetails.sprites.other.dream_world.front_default;
         const parts = poke.url.split("/");
         const pokemonId = parts[parts.length - 2];
         const types = Pdetails.types.map((item) => item.type.name);
@@ -230,15 +232,18 @@ const Pokemon = () => {
   useEffect(() => {
     dispatch({ type: "SET_FILTERED_RESULT", payload: state.posts });
   }, [state.posts]);
+  const [openstat, setopenstat] = useState(false);
   const toggleClass = () => {
-    console.log("Class called");
-    document.getElementById("hidden").display = "block";
+    setopenstat(!openstat)
   };
   const [isOpen, setIsOpen] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+  const toggle = () => {
+    setOpen(!open)
+  }
 
   return (
     <div>
@@ -265,15 +270,16 @@ const Pokemon = () => {
               </svg>
 
               </div>
-              {isOpen && <div>Open</div>}
-              <div className="smallContent"><h3>Gender</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+              {isOpen && <OverlayContent />}
+              {!isOpen && <div className="smallContent"><h3>Gender</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-              </svg></div>
-              <div className="smallContent"><h3>Stats</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+              </svg></div>}
+              {!isOpen && <div className="smallContent"><h3>Stats</h3> (Normal+5 More)<svg onClick={toggle} xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-              </svg></div>
+              </svg></div>}
+              {open && <OverlayStats />}
             </div>
 
             <div className="smallbtn">
@@ -287,25 +293,25 @@ const Pokemon = () => {
         <Gender />
         <div className="statsFilter">
           <h4>Stats</h4>
-          <select
+          <button
             onClick={toggleClass}
             style={{
               width: "194px",
               height: "57px",
               borderRadius: "8px",
               background: "#C9DDE2",
-              border: "none", paddingLeft: "2%", paddingRight: "2%"
+              cursor: "pointer",
+              border: "none", paddingRight: "50%"
             }}
           >
-            <option value="">HP + 5 More</option>
-
-          </select>
+            HP+5 More
+          </button>
         </div>
 
-        <div style={{ border: "2px solid red", width: "600px" }} id="hidden">
+        {openstat && <div style={{ width: "600px", zIndex: "100", background: "white", position: "absolute", left: "60%", top: "38%", borderRadius: "8px", boxShadow: "0px 4px 14px 0px rgba(46, 49, 86, 0.40)", color: "#2E3156" }} >
           <h2>&nbsp;&nbsp;&nbsp;&nbsp;Select Stats</h2>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={{ width: "30%" }}>
+            <div style={{ width: "25%" }}>
               <ul className="line">
                 <li>HP</li>
                 <li>Attack</li>
@@ -350,15 +356,17 @@ const Pokemon = () => {
               display: "flex",
               justifyContent: "flex-end",
               gap: "5%",
+              marginTop: "3%",
               marginRight: "7%",
+              marginBottom: "5%"
             }}
           >
-            <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })}>
+            <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })} style={{ borderRadius: "8px", border: "1px solid #2E3156", width: "78px", height: "37px" }}>
               Reset
             </button>
-            {<button onClick={applyFilters}>Apply</button>}
+            {<button onClick={applyFilters} style={{ borderRadius: "8px", border: "1px solid #2E3156", width: "78px", height: "37px", background: "#2E3156", color: "white" }}>Apply</button>}
           </div>
-        </div>
+        </div>}
       </div>
       <div
         style={{
@@ -398,10 +406,11 @@ const Pokemon = () => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "6%",
+          margin: "7%",
         }}
       >
-        <button onClick={PrevPage}>Prev</button>
-        <button onClick={NextPage}>Next</button>
+        <button className="pagination" onClick={PrevPage}>Prev</button>
+        <button className="pagination" onClick={NextPage}>Next</button>
       </div>
     </div>
   );

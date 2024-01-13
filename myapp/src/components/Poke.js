@@ -4,7 +4,15 @@ const Poke = ({ name, Imgurl, id, types }) => {
   const gradientStops = types.map((type, index) => {
     return `${typeColor[type]} ${index * 100}%`;
   });
-
+  const capitalize = (name) => {
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+  const padWithZeros=(number, desiredDigits)=> {
+    const numberString = number.toString();
+    const zerosToAdd = Math.max(0, desiredDigits - numberString.length);
+    const paddedNumber = '0'.repeat(zerosToAdd) + numberString;
+    return paddedNumber;
+  }
   const linearGradient =
     types.length > 1
       ? `linear-gradient(180deg, ${gradientStops.join(", ")})`
@@ -19,11 +27,18 @@ const Poke = ({ name, Imgurl, id, types }) => {
         margin: "5%",
         background: linearGradient,
         textAlign: "center",
+        borderRadius: "8px",
+        border: "1px dashed #2E3156",
+        color: "#2E3156",
+        fontWeight: "600px",
+        fontFamily: "Roboto",
+        fontSize: "17px"
       }}
     >
-      <p>{name}</p>
-      <img height="100px" width="100px" src={Imgurl} alt="" />
-      <p>{id}</p>
+
+      <img height="100px" width="100px" style={{ marginTop: "15px" }} src={Imgurl} alt="" />
+      <p>{capitalize(name)}</p>
+      <p>{padWithZeros(id,3)}</p>
     </div>
   );
 };
