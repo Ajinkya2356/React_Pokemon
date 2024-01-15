@@ -1,7 +1,6 @@
 // PokemonDetails.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Poke from "./Poke";
 import "./style.css";
 import DetailPoke from "./DetailPoke";
 import EvolutionCard from "./EvolutionCard";
@@ -95,7 +94,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
           response = null;
         }
       }
-      chain_data=chain_data.slice().reverse();
+      chain_data = chain_data.slice().reverse();
       console.log("Chain_NEW", chain_data)
       setChain(chain_data);
       setLoading(false);
@@ -138,13 +137,16 @@ const PokemonDetails = ({ pokemon, onClose }) => {
               <h1 className="headingPokemon">
                 {pokemon.name.toUpperCase()} | {padWithZeros(pokemonData.id, 3)} |
               </h1>
-              <DetailPoke Imgurl={pokemon.ImgUrl} types={pokemon.types} />
-              <p className="description" >{pokemonData.text}..<b onClick={openPopup} style={{ textDecoration: "underline" }}>read more</b></p>
-              {popup && <p className="popover">
-                <span onClick={openPopup}>&times;</span>
-                <br />
-                {pokemonData.over}
-              </p>}
+              <div className="outerdiv">
+                <DetailPoke Imgurl={pokemon.ImgUrl} types={pokemon.types} />
+                <p className="description" >{pokemonData.text}..<b onClick={openPopup} style={{ textDecoration: "underline" }}>read more</b></p>
+                {popup && <p className="popover">
+                  <span onClick={openPopup}>&times;</span>
+                  <br />
+                  {pokemonData.over}
+                </p>}
+              </div>
+
               <br />
               <div className="container1">
                 <div>
