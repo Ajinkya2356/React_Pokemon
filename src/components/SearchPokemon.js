@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Pokemon.css"
-import TypeFilter from "./TypeFilter";
 const SearchPokemon = ({ searchQuery, handleSearch }) => {
 
   return (
     <div
-      style={{
-        // display: "inline-block",
-        padding: 0,
-        margin: 0,
+      className="searchFilter"
 
-      }}
     >
       <h4 id="searchTitle">Search by</h4>
       <div >

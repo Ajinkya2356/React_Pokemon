@@ -223,7 +223,7 @@ const Pokemon = () => {
         return true;
       }
     });
-
+    setopenstat(false);
     dispatch({ type: "SET_FILTERED_RESULT", payload: filteredResult });
   };
 
@@ -347,16 +347,17 @@ const Pokemon = () => {
               borderRadius: "8px",
               background: "#C9DDE2",
               cursor: "pointer",
-              border: "none", paddingRight: "50%"
+              border: "none", paddingRight: "50%",
+
             }}
           >
             HP+5 More
           </button>
         </div>
 
-        {openstat && <div style={{ width: "600px", zIndex: "100", background: "white", position: "absolute", left: "60%", top: "38%", borderRadius: "8px", boxShadow: "0px 4px 14px 0px rgba(46, 49, 86, 0.40)", color: "#2E3156" }} >
+        {openstat && <div style={{ width: "600px", zIndex: "100", background: "white", position: "absolute", left: "60%", top: "38%", borderRadius: "8px", boxShadow: "0px 4px 14px 0px rgba(46, 49, 86, 0.40)", color: "#2E3156", }} >
           <h2>&nbsp;&nbsp;&nbsp;&nbsp;Select Stats</h2>
-          <span style={{position:"absolute",top:"5%",left:"85%"}} onClick={toggleClass}>
+          <span style={{ position: "absolute", top: "5%", left: "85%" }} onClick={toggleClass}>
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
@@ -457,7 +458,7 @@ const Pokemon = () => {
         {state.error ? state.error : null}
       </div>
 
-      <div
+      {state.loading ? <div></div> : <div
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -468,7 +469,7 @@ const Pokemon = () => {
       >
         <button className="pagination" onClick={PrevPage}>Prev</button>
         <button className="pagination" onClick={NextPage}>Next</button>
-      </div>
+      </div>}
     </div>
   );
 };

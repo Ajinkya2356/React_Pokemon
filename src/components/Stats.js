@@ -5,7 +5,7 @@ import "./Pokemon.css"
 
 const Stats = ({ selection, range, statename }) => {
   return (
-    <div >
+    <div>
       <div className="statsWindow">
         <Grid container spacing={2} alignItems="center" className="p-0">
 

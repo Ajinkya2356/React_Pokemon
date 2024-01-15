@@ -106,12 +106,12 @@ body {
   height: 370px;
   border-radius: 8px;
   border: 1px solid #2e3156;
-  margin-left:5%;
+  margin-left: 5%;
 }
 ul li {
   list-style: none;
   width: 50%;
-  margin-left:-5%;
+  margin-left: -5%;
 }
 ul {
   display: flex;
@@ -119,13 +119,17 @@ ul {
   justify-content: flex-start;
   align-items: flex-start;
 }
-.statsWindow{
-  width:350px;
+.statsWindow {
+  width: 350px;
   margin-top: 2%;
-  background-color: #F1F3F3;
+  background-color: #f1f3f3;
   border-radius: 8px;
   border: 1px solid #2e3156;
-  padding:0 5%;
+  padding: 0 5%;
+}
+.searchFilter {
+  margin: 0;
+  padding-bottom: 5%;
 }
 @media screen and (min-width: 1425px) {
   .hamburger {
@@ -147,13 +151,16 @@ ul {
   #searchTitle {
     display: none;
   }
+  .searchFilter {
+    padding: 0;
+  }
 }
 @media screen and (max-width: 800px) {
   .searchInput {
     width: 239px;
     margin-right: 15px;
   }
-  .statsWindow{
-    width:230px;
+  .statsWindow {
+    width: 230px;
   }
 }

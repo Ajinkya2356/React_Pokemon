@@ -53,27 +53,51 @@ const PokemonDetails = ({ pokemon, onClose }) => {
         over,
       });
 
-      let speciesInfo = data;
-      console.log(speciesInfo);
-      const evolution_data = [];
-      while (speciesInfo !== null) {
-        let types = await axios.get(`https://pokeapi.co/api/v2/pokemon/${speciesInfo.id}`);
-        const typePoke = types.data.types.map((a) => a.type.name)
-        evolution_data.unshift({
-          nameInfo: { id: speciesInfo.id, name: speciesInfo.name },
-          image:
-            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/" +
-            speciesInfo.id +
+      // let speciesInfo = data;
+      // console.log(speciesInfo);
+      // const evolution_data = [];
+      // while (speciesInfo !== null) {
+      //   let types = await axios.get(`https://pokeapi.co/api/v2/pokemon/${speciesInfo.id}`);
+      //   const typePoke = types.data.types.map((a) => a.type.name)
+      //   evolution_data.unshift({
+      //     nameInfo: { id: speciesInfo.id, name: speciesInfo.name },
+      //     image:
+      //       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/" +
+      //       speciesInfo.id +
+      //       ".svg",
+      //     types: typePoke
+      //   });
+      //   speciesInfo = speciesInfo.evolves_from_species
+      //     ? await (await fetch(speciesInfo.evolves_from_species.url)).json()
+      //     : null;
+      // }
+
+      let PokeData = await axios.get(data.evolution_chain.url);
+      let response = PokeData.data.chain;
+      console.log("Response", response)
+      let chain_data = [];
+      while (response != null) {
+        let pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon/${response.species.name}`);
+        const typePoke = pokeData.data.types.map((a) => a.type.name);
+        console.log("Response", response)
+        chain_data.unshift({
+          image: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/" +
+            pokeData.data.id +
             ".svg",
-          types: typePoke
-        });
-        speciesInfo = speciesInfo.evolves_from_species
-          ? await (await fetch(speciesInfo.evolves_from_species.url)).json()
-          : null;
+          types: typePoke,
+
+        })
+        console.log("Species", response.species.name)
+        if (response.evolves_to.length > 0) {
+          response = response.evolves_to[0];
+        }
+        else {
+          response = null;
+        }
       }
-
-
-      setChain(evolution_data);
+      chain_data=chain_data.slice().reverse();
+      console.log("Chain_NEW", chain_data)
+      setChain(chain_data);
       setLoading(false);
     } catch (e) {
       <h1>Something Went Wrong!</h1>;
