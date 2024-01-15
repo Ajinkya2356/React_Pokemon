@@ -1,5 +1,4 @@
 import React from "react";
-import "../Details/style.css"
 import styles from "./poke.module.css"
 const Poke = ({ name, Imgurl, id, types }) => {
   const gradientStops = types.map((type, index) => {

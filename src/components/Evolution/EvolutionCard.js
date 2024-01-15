@@ -1,5 +1,5 @@
 import React from "react";
-
+import styles from "./style.module.css";
 const EvolutionCard = ({ Imgurl, types }) => {
   const gradientStops = types.map((type, index) => {
     return `${typeColor[type]} ${index * 100}%`;
@@ -10,9 +10,9 @@ const EvolutionCard = ({ Imgurl, types }) => {
       : typeColor[types[0]];
   return (
     <div>
-      <div className="smallImage" style={{ background: linearGradient }}>
+      <div className={styles.smallImage} style={{ background: linearGradient }}>
         <img
-          className="abcd"
+          className={styles.abcd}
           src={Imgurl}
           alt=""
         />

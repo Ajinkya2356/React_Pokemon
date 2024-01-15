@@ -1,0 +1,30 @@
+
+.smallImage {
+    border-radius: 8px;
+    border: 1px dashed #2e3156;
+    width: 155.177px;
+    height: 216px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .abcd {
+    width: 104px;
+    height: 120px;
+  }
+  @media screen and (max-width: 1424px) {
+   
+    
+    
+    
+    .smallImage {
+      width: 84.054px;
+      height: 117px;
+    }
+    .abcd {
+      width: 63.194px;
+      height: 65px;
+    }
+    
+  }

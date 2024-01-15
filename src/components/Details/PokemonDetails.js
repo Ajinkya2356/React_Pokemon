@@ -1,7 +1,7 @@
 // PokemonDetails.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./style.css";
+import styles from "./style.module.css";
 import DetailPoke from "../Card/DetailPoke";
 import EvolutionCard from "../Evolution/EvolutionCard";
 import Loader from "../Loader/Loader";
@@ -123,10 +123,10 @@ const PokemonDetails = ({ pokemon, onClose }) => {
     setpopup(!popup)
   }
   return (
-    <div className="overlayStyles">
-      <div className="modal">
-        <div className="modal-content">
-          <span className="close" onClick={onClose}>
+    <div className={styles.overlayStyles}>
+      <div className={styles.modal}>
+        <div className={styles.modal_content}>
+          <span className={styles.close} onClick={onClose}>
             &times;
           </span>
 
@@ -134,13 +134,13 @@ const PokemonDetails = ({ pokemon, onClose }) => {
             <Loader />
           ) : (
             <>
-              <h1 className="headingPokemon">
+              <h1 className={styles.headingPokemon}>
                 {pokemon.name.toUpperCase()} | {padWithZeros(pokemonData.id, 3)} |
               </h1>
-              <div className="outerdiv">
+              <div className={styles.outerdiv}>
                 <DetailPoke Imgurl={pokemon.ImgUrl} types={pokemon.types} />
-                <p className="description" >{pokemonData.text}..<b onClick={openPopup} style={{ textDecoration: "underline" }}>read more</b></p>
-                {popup && <p className="popover">
+                <p className={styles.description}>{pokemonData.text}..<b onClick={openPopup} style={{ textDecoration: "underline" }}>read more</b></p>
+                {popup && <p className={styles.popover}>
                   <span onClick={openPopup}>&times;</span>
                   <br />
                   {pokemonData.over}
@@ -148,7 +148,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
               </div>
 
               <br />
-              <div className="container1">
+              <div className={styles.container1}>
                 <div>
                   <p>Height</p>
                   <p style={{ fontWeight: "400" }}>{pokemonData.height}</p>
@@ -171,7 +171,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                 </div>
               </div>
               <div
-                className="container2"
+                className={styles.container2}
               >
                 <div>
                   <p>Abilities</p>
@@ -179,42 +179,42 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                 </div>
                 <div>
                   <p>Types</p>
-                  <p style={{ fontWeight: "400" }}>{pokemonData.types.map((a) => <span className="types" style={{ background: typeColor[a] }}>{capitalize(a)}</span>)}</p>
+                  <p style={{ fontWeight: "400" }}>{pokemonData.types.map((a) => <span className={styles.types} style={{ background: typeColor[a] }}>{capitalize(a)}</span>)}</p>
                 </div>
                 <div>
                   <p>Weak Against</p>
                 </div>
               </div>
               <br /><br /><br />
-              <div className="statsbox">
+              <div className={styles.statsbox}>
                 <h2>Stats</h2>
-                <div className="innerbox">
+                <div className={styles.innerbox}>
                   <div style={{ width: "50%" }}>
                     <p>HP &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      &nbsp; &nbsp;    <span className="span2">
-                        <span className="span3">{pokemonData.stats.hp}</span>
+                      &nbsp; &nbsp;    <span className={styles.span2}>
+                        <span className={styles.span3}>{pokemonData.stats.hp}</span>
                       </span></p>
-                    <p>Defense &nbsp;&nbsp;&nbsp;&nbsp;<span className="span2">
-                      <span className="span3">{pokemonData.stats.defense}</span>
+                    <p>Defense &nbsp;&nbsp;&nbsp;&nbsp;<span className={styles.span2}>
+                      <span className={styles.span3}>{pokemonData.stats.defense}</span>
                     </span></p>
-                    <p>Sp.Attack &nbsp; <span className="span2">
-                      <span className="span3">{pokemonData.stats.specialAttack}</span>
+                    <p>Sp.Attack &nbsp; <span className={styles.span2}>
+                      <span className={styles.span3}>{pokemonData.stats.specialAttack}</span>
                     </span>
                     </p>
                   </div>
                   <div style={{ width: "50%" }}>
                     <p>Attack&nbsp;&nbsp;&nbsp;
-                      <span className="span2">
-                        <span className="span3">{pokemonData.stats.attack}</span>
+                      <span className={styles.span2}>
+                        <span className={styles.span3}>{pokemonData.stats.attack}</span>
                       </span>
                     </p>
-                    <p>Speed &nbsp; <span className="span2">
-                      <span className="span3">{pokemonData.stats.speed}</span>
+                    <p>Speed &nbsp; <span className={styles.span2}>
+                      <span className={styles.span3}>{pokemonData.stats.speed}</span>
                     </span>
                     </p>
                     <p>Sp.Def&nbsp;&nbsp;&nbsp;
-                      <span className="span2">
-                        <span className="span3">{pokemonData.stats.specialDefence}</span>
+                      <span className={styles.span2}>
+                        <span className={styles.span3}>{pokemonData.stats.specialDefence}</span>
                       </span>
                     </p>
                   </div>
@@ -223,7 +223,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
               </div>
               <br /><br />
               <h2>Evolution Chain</h2>
-              <div className="evolutionchain">
+              <div className={styles.evolutionchain}>
                 {chain && chain.length > 0 ? (
                   chain.map((poke, index) => {
                     return (
@@ -234,7 +234,7 @@ const PokemonDetails = ({ pokemon, onClose }) => {
                         ></EvolutionCard>
                         {
                           index !== chain.length - 1 ? (
-                            <div className="arrows">
+                            <div className={styles.arrows}>
                               <svg style={{
                                 position: "absolute", left: `${39 + index * 20}%`,
                                 top: "138%",
