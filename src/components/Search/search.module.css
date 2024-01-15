@@ -1,0 +1,30 @@
+.searchFilter {
+  margin: 0;
+  padding-bottom: 5%;
+}
+.searchInput {
+  width: 663px;
+  height: 57px;
+  border-radius: 8px;
+  background: #c9dde2;
+  border: none;
+}
+@media screen and (max-width: 1424px) {
+  .searchFilter {
+    padding: 0;
+  }
+  .searchInput {
+    margin-right: 15px;
+  }
+}
+@media screen and (max-width: 1424px) {
+  #searchTitle {
+    display: none;
+  }
+}
+@media screen and (max-width: 800px) {
+  .searchInput {
+    width: 239px;
+    margin-right: 15px;
+  }
+}

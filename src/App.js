@@ -1,7 +1,7 @@
 import "./App.css";
 
 import React from "react";
-import Pokemon from "./components/Pokemon";
+import Pokemon from "./components/Pokemon/Pokemon";
 function App() {
 
   return <div>

@@ -1,5 +1,6 @@
 import React from "react";
-import './style.css'
+import "../Details/style.css"
+import styles from "./poke.module.css"
 const Poke = ({ name, Imgurl, id, types }) => {
   const gradientStops = types.map((type, index) => {
     return `${typeColor[type]} ${index * 100}%`;
@@ -22,7 +23,7 @@ const Poke = ({ name, Imgurl, id, types }) => {
       style={{
         background: linearGradient,
       }}
-      className="pokemonDesign"
+      className={styles.pokemonDesign}
     >
 
       <img height="100px" width="100px" style={{ marginTop: "15px" }} src={Imgurl} alt="" />

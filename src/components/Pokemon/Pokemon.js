@@ -1,15 +1,15 @@
 import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
-import Poke from "./Poke";
-import SearchPokemon from "./SearchPokemon";
-import TypeFilter from "./TypeFilter";
-import Stats from "./Stats";
-import PokemonDetails from "./PokemonDetails";
+import Poke from "../PokemonCard/Poke";
+import SearchPokemon from "../Search/SearchPokemon";
+import TypeFilter from "../TypeFilter/TypeFilter";
+import Stats from "../Stats/Stats";
+import PokemonDetails from "../Details/PokemonDetails";
 import "./Pokemon.css";
-import Gender from "./Gender";
-import OverlayContent from "./OverlayContent";
+import Gender from "../Gender/Gender";
+import OverlayContent from "../Overlay/OverlayContent";
 
-import Loader from "./Loader";
+import Loader from "../Loader/Loader";
 const initialState = {
   loading: true,
   error: "",

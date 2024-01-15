@@ -102,15 +102,7 @@
   display: flex;
   gap: 5%;
 }
-.Image {
-  border-radius: 8px;
-  border: 1px solid #2e3156;
-  width: 199px;
-  height: 277px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .smallImage {
   border-radius: 8px;
   border: 1px dashed #2e3156;
@@ -140,19 +132,7 @@
   gap: 10%;
   margin-top: 5%;
 }
-.pokemonDesign {
-  height: 200px;
-  width: 140px;
-  border: 1px dashed #2e3156;
-  color: #2e3156;
-  font-weight: 600;
-  font-family: "Roboto";
-  font-size: 17px;
-  text-align: center;
-  padding: 2%;
-  margin: 5%;
-  border-radius: 8px;
-}
+
 .abcd {
   width: 104px;
   height: 120px;
@@ -189,16 +169,7 @@
     justify-content: flex-start;
     gap: 10%;
   }
-  .Image {
-    width: 159px;
-    height: 221.322px;
-    margin-top: 15%;
-    border: 1px dashed #2e3156;
-  }
-  .Image img {
-    width: 125.442px;
-    height: 123.045px;
-  }
+  
   .smallImage {
     width: 84.054px;
     height: 117px;
@@ -259,7 +230,9 @@
   .description {
     overflow-y: hidden;
   }
-  
+  .container1 {
+    gap: 5%;
+  }
 }
 @media screen and (max-width: 450px) {
   .modal-content {
@@ -268,6 +241,4 @@
   .description {
     overflow-y: hidden;
   }
-  
 }
-

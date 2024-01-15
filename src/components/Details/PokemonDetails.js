@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
-import DetailPoke from "./DetailPoke";
-import EvolutionCard from "./EvolutionCard";
-import Loader from "./Loader";
+import DetailPoke from "../Card/DetailPoke";
+import EvolutionCard from "../Evolution/EvolutionCard";
+import Loader from "../Loader/Loader";
 const PokemonDetails = ({ pokemon, onClose }) => {
   const [pokemonData, setPokemonData] = useState({});
   const [loading, setLoading] = useState(true);

@@ -1,15 +1,13 @@
 import React from "react";
 import Slider from "@mui/material/Slider";
 import Grid from "@mui/material/Grid";
-import "./Pokemon.css"
+import styles from "./stats.module.css";
 
 const Stats = ({ selection, range, statename }) => {
   return (
     <div>
-      <div className="statsWindow">
+      <div className={styles.statsWindow}>
         <Grid container spacing={2} alignItems="center" className="p-0">
-
-
           <Grid item>0</Grid>
           <Grid item xs>
             <Slider

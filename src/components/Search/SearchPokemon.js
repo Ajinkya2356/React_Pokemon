@@ -1,16 +1,16 @@
 import React from "react";
-import "./Pokemon.css"
+import styles from "./search.module.css"
 const SearchPokemon = ({ searchQuery, handleSearch }) => {
 
   return (
     <div
-      className="searchFilter"
+      className={styles.searchFilter}
 
     >
-      <h4 id="searchTitle">Search by</h4>
+      <h4 id={styles.searchTitle}>Search by</h4>
       <div >
         <input
-          className="searchInput"
+          className={styles.searchInput}
           placeholder="Name or Number"
           value={searchQuery}
           onChange={handleSearch}
