@@ -1,0 +1,13 @@
+.pokemonDesign {
+    height: 200px;
+    width: 140px;
+    border: 1px dashed #2e3156;
+    color: #2e3156;
+    font-weight: 600;
+    font-family: "Roboto";
+    font-size: 17px;
+    text-align: center;
+    padding: 2%;
+    margin: 5%;
+    border-radius: 8px;
+  }

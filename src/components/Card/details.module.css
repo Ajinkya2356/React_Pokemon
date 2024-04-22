@@ -1,0 +1,21 @@
+.Image {
+  border-radius: 8px;
+  border: 1px solid #2e3156;
+  width: 199px;
+  height: 277px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@media screen and (max-width: 1424px) {
+  .Image {
+    width: 159px;
+    height: 221.322px;
+    margin-top: 15%;
+    border: 1px dashed #2e3156;
+  }
+  .Image img {
+    width: 125.442px;
+    height: 123.045px;
+  }
+}

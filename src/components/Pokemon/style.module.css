@@ -11,20 +11,6 @@ body {
   max-width: 100%;
   height: 150px;
 }
-.line li {
-  margin-top: 20%;
-  list-style: none;
-}
-#hidden {
-  display: none;
-}
-.searchInput {
-  width: 663px;
-  height: 57px;
-  border-radius: 8px;
-  background: #c9dde2;
-  border: none;
-}
 .hamburger {
   width: 76.667px;
   height: 57.5px;
@@ -63,6 +49,15 @@ body {
   margin-bottom: 5%;
   margin-left: 3%;
 }
+.overlay2 {
+  overflow-y: scroll;
+  width: 295px;
+  height: 370px;
+  border-radius: 8px;
+  border: 1px solid #2e3156;
+  margin-left: 5%;
+}
+
 .smallbtn {
   border-top: 1px solid #2e3156;
   position: absolute;
@@ -76,6 +71,14 @@ body {
   background-color: white;
   /* display: none; */
 }
+.resetbtn {
+  width: 138.614px;
+  height: 37px;
+  border-radius: 8px;
+  background-color: white;
+  color: #2e3156;
+  border: 1px solid #2e3156;
+}
 .applybtn {
   width: 138.614px;
   height: 37px;
@@ -84,13 +87,12 @@ body {
   color: white;
   border: 1px solid #2e3156;
 }
-.resetbtn {
-  width: 138.614px;
-  height: 37px;
-  border-radius: 8px;
-  background-color: white;
-  color: #2e3156;
-  border: 1px solid #2e3156;
+.line li {
+  margin-top: 20%;
+  list-style: none;
+}
+#hidden {
+  display: none;
 }
 .pagination {
   border-radius: 8px;
@@ -100,14 +102,7 @@ body {
   height: 37px;
   font-size: 15px;
 }
-.overlay2 {
-  overflow-y: scroll;
-  width: 295px;
-  height: 370px;
-  border-radius: 8px;
-  border: 1px solid #2e3156;
-  margin-left: 5%;
-}
+
 ul li {
   list-style: none;
   width: 50%;
@@ -127,14 +122,14 @@ ul {
   border: 1px solid #2e3156;
   padding: 0 5%;
 }
-.searchFilter {
-  margin: 0;
-  padding-bottom: 5%;
-}
-
 @media screen and (min-width: 1425px) {
   .hamburger {
     display: none;
+  }
+}
+@media screen and (max-width: 1424px) {
+  .hamburger {
+    display: inline-block;
   }
 }
 @media screen and (max-width: 1424px) {
@@ -142,26 +137,5 @@ ul {
   .genderFilter,
   .statsFilter {
     display: none;
-  }
-  .hamburger {
-    display: inline-block;
-  }
-  .searchInput {
-    margin-right: 15px;
-  }
-  #searchTitle {
-    display: none;
-  }
-  .searchFilter {
-    padding: 0;
-  }
-}
-@media screen and (max-width: 800px) {
-  .searchInput {
-    width: 239px;
-    margin-right: 15px;
-  }
-  .statsWindow {
-    width: 230px;
   }
 }

@@ -1,15 +1,14 @@
 import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
-import Poke from "./Poke";
-import SearchPokemon from "./SearchPokemon";
-import TypeFilter from "./TypeFilter";
-import Stats from "./Stats";
-import PokemonDetails from "./PokemonDetails";
-import "./Pokemon.css";
-import Gender from "./Gender";
-import OverlayContent from "./OverlayContent";
-
-import Loader from "./Loader";
+import Poke from "../PokemonCard/Poke";
+import SearchPokemon from "../Search/SearchPokemon";
+import TypeFilter from "../TypeFilter/TypeFilter";
+import Stats from "../Stats/Stats";
+import PokemonDetails from "../Details/PokemonDetails";
+import Gender from "../Gender/Gender";
+import OverlayContent from "../Overlay/OverlayContent";
+import styles from './style.module.css';
+import Loader from "../Loader/Loader";
 const initialState = {
   loading: true,
   error: "",
@@ -250,39 +249,39 @@ const Pokemon = () => {
 
   return (
     <div>
-      <div className="box">
+      <div className={styles.box}>
 
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
           <SearchPokemon className="searchFilter"
             searchQuery={state.searchQuery}
             handleSearch={handleSearch}
           />
-          <button className="hamburger" onClick={toggleWindow}>
+          <button className={styles.hamburger} onClick={toggleWindow}>
             ☰
           </button>
-          {window && <div className="filterWindow">
-            <span className="closebtn" onClick={onClose}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+          {window && <div className={styles.filterWindow}>
+            <span className={styles.closebtn} onClick={onClose}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
               <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
               <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
             </svg></span>
             <h1>&nbsp;&nbsp;Filters</h1>
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <div className="smallContent"><h3>Types</h3> (Nomral+5 More)<svg onClick={toggleDropdown} xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+              <div className={styles.smallContent}><h3>Types</h3> (Nomral+5 More)<svg onClick={toggleDropdown} xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
               </svg>
 
               </div>
               {isOpen && <OverlayContent searchType={state.searchType} handleSearch={handleFilter} />}
-              {!isOpen && <div className="smallContent"><h3>Gender</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+              {!isOpen && <div className={styles.smallContent}><h3>Gender</h3> (Normal+5 More)<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
               </svg></div>}
-              {!isOpen && <div className="smallContent"><h3>Stats</h3> (Normal+5 More)<svg onClick={toggle} xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+              {!isOpen && <div className={styles.smallContent}><h3>Stats</h3> (Normal+5 More)<svg onClick={toggle} xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
               </svg></div>}
-              {open && <div className="overlay2">
+              {open && <div className={styles.overlay2}>
                 <ul>
                   <li>
                     <h3>HP</h3>
@@ -328,16 +327,16 @@ const Pokemon = () => {
               </div>}
             </div>
 
-            <div className="smallbtn">
-              <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })} className="resetbtn">Reset</button>
-              <button onClick={applyFilters} className="applybtn">Apply</button>
+            <div className={styles.smallbtn}>
+              <button onClick={() => dispatch({ type: "CLEAR_SEARCH" })} className={styles.resetbtn}>Reset</button>
+              <button onClick={applyFilters} className={styles.applybtn}>Apply</button>
             </div>
           </div>}
         </div>
 
         <TypeFilter searchType={state.searchType} handleSearch={handleFilter} />
         <Gender />
-        <div className="statsFilter">
+        <div className={styles.statsFilter}>
           <h4>Stats</h4>
           <button
             onClick={toggleClass}
@@ -365,7 +364,7 @@ const Pokemon = () => {
           </span>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{ width: "25%" }}>
-              <ul className="line">
+              <ul className={styles.line}>
                 <li>HP</li>
                 <li>Attack</li>
                 <li>Defence</li>
@@ -467,8 +466,8 @@ const Pokemon = () => {
           margin: "7%",
         }}
       >
-        <button className="pagination" onClick={PrevPage}>Prev</button>
-        <button className="pagination" onClick={NextPage}>Next</button>
+        <button className={styles.pagination} onClick={PrevPage}>Prev</button>
+        <button className={styles.pagination} onClick={NextPage}>Next</button>
       </div>}
     </div>
   );

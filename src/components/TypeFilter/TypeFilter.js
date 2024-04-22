@@ -1,8 +1,8 @@
 import React from "react";
-
+import styles from "../Pokemon/style.module.css"
 const TypeFilter = ({ searchType, handleSearch }) => {
   return (
-    <div className="typeFilter">
+    <div className={styles.typeFilter}>
       <h4>Type</h4>
       <select
         style={{

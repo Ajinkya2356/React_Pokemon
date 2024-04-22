@@ -1,27 +1,38 @@
 import React from "react";
-
-const EvolutionCard = ({ Imgurl, types }) => {
+import styles from "./poke.module.css"
+const Poke = ({ name, Imgurl, id, types }) => {
   const gradientStops = types.map((type, index) => {
     return `${typeColor[type]} ${index * 100}%`;
   });
+  const capitalize = (name) => {
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+  const padWithZeros = (number, desiredDigits) => {
+    const numberString = number.toString();
+    const zerosToAdd = Math.max(0, desiredDigits - numberString.length);
+    const paddedNumber = '0'.repeat(zerosToAdd) + numberString;
+    return paddedNumber;
+  }
   const linearGradient =
     types.length > 1
       ? `linear-gradient(180deg, ${gradientStops.join(", ")})`
       : typeColor[types[0]];
   return (
-    <div>
-      <div className="smallImage" style={{ background: linearGradient }}>
-        <img
-          className="abcd"
-          src={Imgurl}
-          alt=""
-        />
-      </div>
+    <div
+      style={{
+        background: linearGradient,
+      }}
+      className={styles.pokemonDesign}
+    >
+
+      <img height="100px" width="100px" style={{ marginTop: "15px" }} src={Imgurl} alt="" />
+      <p>{capitalize(name)}</p>
+      <p>{padWithZeros(id, 3)}</p>
     </div>
   );
 };
 
-export default EvolutionCard;
+export default Poke;
 const typeColor = {
   normal: "#DDCBD0",
   fighting: "#FCC1B0",

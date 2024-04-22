@@ -1,5 +1,5 @@
 import React from 'react'
-import './style.css'
+import styles from "./details.module.css"
 const DetailPoke = ({ Imgurl, types }) => {
     const gradientStops = types.map((type, index) => {
         return `${typeColor[type]} ${index * 100}%`;
@@ -9,7 +9,7 @@ const DetailPoke = ({ Imgurl, types }) => {
             ? `linear-gradient(180deg, ${gradientStops.join(", ")})`
             : typeColor[types[0]];
     return (
-        <div className="Image" style={{ background: linearGradient, }}>
+        <div className={styles.Image} style={{ background: linearGradient, }}>
             <img style={{ height: "154px", width: "157px" }} src={Imgurl} alt="" />
         </div>
     )

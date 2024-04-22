@@ -1,8 +1,8 @@
 import React from "react";
-
+import styles from "../Pokemon/style.module.css"
 const Gender = () => {
   return (
-    <div className="genderFilter" >
+    <div className={styles.genderFilter} >
       <h4>Gender</h4>
       <select
         style={{
